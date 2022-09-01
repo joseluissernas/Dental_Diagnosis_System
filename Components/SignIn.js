@@ -12,6 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Appbar} from 'react-native-paper';
+import DatePicker from './DatePicker';
 
 export default class SignIn extends Component {
   //variables

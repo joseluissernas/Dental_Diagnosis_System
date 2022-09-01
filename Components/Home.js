@@ -39,7 +39,7 @@ export default class Home extends Component {
         if (this.readyState == 4 && this.status == 200) {
           // Typical action to be performed when the document is ready:
           if (xhttp.responseText == 0) {
-            Alert.alert('Datos erroneos, intentalo nuevamente');
+            Alert.alert('Wrong data, try again');
           } else {
             var data = xhttp.responseText;
             var separateData = data.split(',');
@@ -50,6 +50,7 @@ export default class Home extends Component {
             console.log(checkuser);
             if (email == _this.state.username) {
               Alert.alert('Welcome' + ' ' + checkuser);
+              resetValues();
               _this.props.navigation.navigate('Log In');
               console.log('logButton');
             }
@@ -70,6 +71,7 @@ export default class Home extends Component {
     //Function for the button to go to the Sign In screen
     const signButton = () => {
       let _this = this;
+      _this.setState({enable: true});
       _this.props.navigation.navigate('Sign In');
       console.log('signButton');
     };

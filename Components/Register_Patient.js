@@ -54,6 +54,12 @@ export default class Register_Patient extends Component {
       xhttp.send();
     };
 
+    //Function to generate diagnosis
+    const generateDiagnosis = () => {
+      let _this = this;
+      _this.props.navigation.navigate('ImagePicker');
+    };
+
     //Function temporary to go back
     const go_Back = () => {
       let _this = this;
@@ -123,6 +129,14 @@ export default class Register_Patient extends Component {
               <Button
                 onPress={register_Patient_Button}
                 title="Register Patient"
+                color="#40e0d0"
+              />
+            </View>
+            <Separator />
+            <View style={stylesSAV.containerBtn}>
+              <Button
+                onPress={generateDiagnosis}
+                title="Generate Diagnosis"
                 color="#40e0d0"
               />
             </View>

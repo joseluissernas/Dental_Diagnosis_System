@@ -20,6 +20,7 @@ import Home from './Components/Home';
 import Login from './Components/Login';
 import SignIn from './Components/SignIn';
 import Register_Patient from './Components/Register_Patient';
+import ImagePicker from './Components/ImagePicker';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Appbar, Menu} from 'react-native-paper';
@@ -46,6 +47,7 @@ export default function App() {
         <Stack.Screen name="Log In" component={Login} />
         <Stack.Screen name="Sign In" component={SignIn} />
         <Stack.Screen name="Register_Patient" component={Register_Patient} />
+        <Stack.Screen name="ImagePicker" component={ImagePicker} />
       </Stack.Navigator>
     </NavigationContainer>
   );
