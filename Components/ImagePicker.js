@@ -1,11 +1,11 @@
-import {View, Button, Image, StyleSheet} from 'react-native';
+import {View, Button, Image, StyleSheet, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ImagePicker = ({navigation: {navigate}}) => {
   const [image, setImage] = useState('https://via.placeholder.com/224');
-
+  //method to select an image of the gallery
   const selectImage = () => {
     const options = {
       title: 'Select an image',
@@ -25,7 +25,7 @@ const ImagePicker = ({navigation: {navigate}}) => {
       }
     });
   };
-
+  //method to access to the camera and take a picture
   const takePicture = () => {
     const options = {
       title: 'Take a picture',
@@ -43,8 +43,46 @@ const ImagePicker = ({navigation: {navigate}}) => {
       } else {
         const uri = response.assets[0].uri;
         setImage(uri);
+        console.log(uri);
       }
     });
+  };
+  //method to upload the image to the server
+  const uploadImage = async () => {
+    //take on local variable the uri of the image
+    let localUri = image;
+    if (localUri == null) {
+      Alert.alert('You should take a picture or select an image');
+    } else {
+      //divide th parts of the uri to the form data
+      let filename = localUri.split('/').pop();
+      let compare = /\.(\w+)$/.exec(filename);
+      let type = compare ? `image/${compare[1]}` : `image`;
+      //create the form data
+      const formData = new FormData();
+      formData.append('photo', {uri: localUri, name: filename, type});
+      //only to make sure that the data is correct
+      console.log(localUri);
+      console.log(filename);
+      console.log(type);
+      //fetch to post the image to the server
+      // return await fetch('server', {
+      //   method: 'POST',
+      //   body: formData,
+      //   header: {
+      //     'content-type': 'multipart/form-data',
+      //   },
+      // })
+      //   .then(res => res.json())
+      //   .catch(error => console.error('Error', error))
+      //   .then(response => {
+      //     if (response.status == 1) {
+      //       Alert.alert('Succesful image uploaded');
+      //     } else {
+      //       Alert.alert('Something went wrong uploading the image');
+      //     }
+      //   });
+    }
   };
 
   //Function for a separator for buttons
@@ -68,6 +106,10 @@ const ImagePicker = ({navigation: {navigate}}) => {
         <Separator />
         <View style={stylesSAV.containerBtn}>
           <Button title="Take Picture" onPress={takePicture} color="#40e0d0" />
+        </View>
+        <Separator />
+        <View style={stylesSAV.containerBtn}>
+          <Button title="Upload Image" onPress={uploadImage} color="#40e0d0" />
         </View>
         <Separator />
         <View style={stylesSAV.containerBtn}>
