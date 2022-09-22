@@ -60,33 +60,37 @@ const ImagePicker = ({navigation: {navigate}}) => {
       let type = compare ? `image/${compare[1]}` : `image`;
       //create the form data
       const formData = new FormData();
-      formData.append('file', {uri: localUri, filename: filename, type});
+      formData.append('file', {
+        uri: localUri,
+        type: type,
+        name: filename,
+      });
+      console.log(formData);
       //only to make sure that the data is correct
       console.log(localUri);
       console.log(filename);
       console.log(type);
       //fetch to post the image to the server
-      return await fetch('http://187.198.58.92:4000/predict', {
+      let res = await fetch('http://187.198.58.92:4000/predict', {
         method: 'POST',
-        body: formData,
         header: {
-          'content-type': 'multipart/form-data',
+          'Content-Type': 'multipart/form-data',
         },
-      })
-        .then(res => res.json())
-        .catch(error => console.error('Error', error))
-        .then(response => {
-          if (
-            response == 0 ||
-            response == 1 ||
-            response == 2 ||
-            response == 3
-          ) {
-            Alert.alert('Succesful image uploaded' + response);
-          } else {
-            Alert.alert('Something went wrong ' + response);
-          }
-        });
+        body: formData,
+      });
+      let responseJson = await res.json();
+      console.log(responseJson);
+      if (responseJson.message == '0') {
+        Alert.alert('Posible gingivitis' + responseJson.message);
+      } else if (responseJson.message == '1') {
+        Alert.alert('Posible gingivitis y sarro' + responseJson.message);
+      } else if (responseJson.message == '2') {
+        Alert.alert('Posible dentadura sana' + responseJson.message);
+      } else if (responseJson.message == '3') {
+        Alert.alert('Posible dentadura con sarro' + responseJson.message);
+      } else {
+        Alert.alert('Something went wrong ' + responseJson.message);
+      }
     }
   };
 
