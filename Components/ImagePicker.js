@@ -60,28 +60,33 @@ const ImagePicker = ({navigation: {navigate}}) => {
       let type = compare ? `image/${compare[1]}` : `image`;
       //create the form data
       const formData = new FormData();
-      formData.append('photo', {uri: localUri, name: filename, type});
+      formData.append('file', {uri: localUri, filename: filename, type});
       //only to make sure that the data is correct
       console.log(localUri);
       console.log(filename);
       console.log(type);
       //fetch to post the image to the server
-      // return await fetch('server', {
-      //   method: 'POST',
-      //   body: formData,
-      //   header: {
-      //     'content-type': 'multipart/form-data',
-      //   },
-      // })
-      //   .then(res => res.json())
-      //   .catch(error => console.error('Error', error))
-      //   .then(response => {
-      //     if (response.status == 1) {
-      //       Alert.alert('Succesful image uploaded');
-      //     } else {
-      //       Alert.alert('Something went wrong uploading the image');
-      //     }
-      //   });
+      return await fetch('http://187.198.58.92:4000/predict', {
+        method: 'POST',
+        body: formData,
+        header: {
+          'content-type': 'multipart/form-data',
+        },
+      })
+        .then(res => res.json())
+        .catch(error => console.error('Error', error))
+        .then(response => {
+          if (
+            response == 0 ||
+            response == 1 ||
+            response == 2 ||
+            response == 3
+          ) {
+            Alert.alert('Succesful image uploaded' + response);
+          } else {
+            Alert.alert('Something went wrong ' + response);
+          }
+        });
     }
   };
 
