@@ -119,7 +119,7 @@ export default class SignIn extends Component {
             <Separator />
             <View style={stylesSAV.containerTxtInput}>
               <TextInput
-                placeholder="Date of Birth"
+                placeholder="Date of Birth (AAAA-MM-DD)"
                 placeholderTextColor="gray"
                 onChangeText={birthday => this.setState({birthday})}
                 value={this.state.birthday}

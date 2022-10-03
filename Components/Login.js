@@ -26,6 +26,10 @@ export default class Login extends Component {
       _this.props.navigation.navigate('Register_Patient');
     };
 
+    const searchPatient_Button = () => {
+      this.props.navigation.navigate('Search_Patient');
+    };
+
     //Function for a separator for buttons
     const Separator = () => <View style={stylesSAV.separator} />;
 
@@ -44,6 +48,14 @@ export default class Login extends Component {
               <Button
                 onPress={new_Patient_Button}
                 title="New Patient"
+                color="#40e0d0"
+              />
+            </View>
+            <Separator />
+            <View style={stylesSAV.containerBtn}>
+              <Button
+                onPress={searchPatient_Button}
+                title="Search Patient"
                 color="#40e0d0"
               />
             </View>
