@@ -29,11 +29,13 @@ export default class Register_Patient extends Component {
           // Typical action to be performed when the document is ready:
           if (xhttp.responseText == 0) {
             Alert.alert('Something went wrong, try again');
+            _this.props.navigation.navigate('ImagePicker');
           } else if (xhttp.responseText == 2) {
             Alert.alert('The patient already exists');
           } else if (xhttp.responseText == 1) {
             Alert.alert('Succesfully registered patient');
             console.log('Paciente registrado exitosamente');
+            _this.props.navigation.navigate('ImagePicker');
           }
         }
       };
@@ -52,12 +54,6 @@ export default class Register_Patient extends Component {
         true,
       );
       xhttp.send();
-    };
-
-    //Function to generate diagnosis
-    const generateDiagnosis = () => {
-      let _this = this;
-      _this.props.navigation.navigate('ImagePicker');
     };
 
     //Function temporary to go back
@@ -129,14 +125,6 @@ export default class Register_Patient extends Component {
               <Button
                 onPress={register_Patient_Button}
                 title="Register Patient"
-                color="#40e0d0"
-              />
-            </View>
-            <Separator />
-            <View style={stylesSAV.containerBtn}>
-              <Button
-                onPress={generateDiagnosis}
-                title="Generate Diagnosis"
                 color="#40e0d0"
               />
             </View>

@@ -1,9 +1,10 @@
-import {View, Button, Image, StyleSheet, Alert} from 'react-native';
+import {View, Button, Image, StyleSheet, Alert, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ImagePicker = ({navigation: {navigate}}) => {
+  //const [patInfo, setPatInfo] = useState(this.props.route.params.item);
   const [image, setImage] = useState('https://via.placeholder.com/224');
   //method to select an image of the gallery
   const selectImage = () => {
@@ -48,7 +49,7 @@ const ImagePicker = ({navigation: {navigate}}) => {
     });
   };
   //method to upload the image to the server
-  const uploadImage = async () => {
+  const generateDiagnosis = async () => {
     //take on local variable the uri of the image
     let localUri = image;
     if (localUri == null) {
@@ -103,30 +104,52 @@ const ImagePicker = ({navigation: {navigate}}) => {
   };
 
   return (
-    <View style={stylesSAV.container}>
-      <SafeAreaView style={stylesSAV.containerImg}>
-        <Image style={stylesSAV.imge} source={{uri: image}} />
-      </SafeAreaView>
-      <View style={stylesSAV.vw}>
-        <Separator />
-        <View style={stylesSAV.containerBtn}>
-          <Button title="Select Image" onPress={selectImage} color="#40e0d0" />
+    <ScrollView>
+      <View style={stylesSAV.container}>
+        <SafeAreaView style={stylesSAV.containerImg}>
+          <Image style={stylesSAV.imge} source={{uri: image}} />
+        </SafeAreaView>
+        <View style={stylesSAV.vw}>
+          <Separator />
+          <View style={stylesSAV.containerBtn}>
+            <Button
+              title="Select Image"
+              onPress={selectImage}
+              color="#40e0d0"
+            />
+          </View>
+          <Separator />
+          <View style={stylesSAV.containerBtn}>
+            <Button
+              title="Take Picture"
+              onPress={takePicture}
+              color="#40e0d0"
+            />
+          </View>
+          <Separator />
+          <View style={stylesSAV.containerBtn}>
+            <Button
+              title="Generate Diagnosis"
+              onPress={generateDiagnosis}
+              color="#40e0d0"
+            />
+          </View>
+          <Separator />
+          <View style={stylesSAV.containerBtn}>
+            <Button
+              title="Save Results"
+              //onPress={saveResults}
+              color="#40e0d0"
+            />
+          </View>
+          <Separator />
+          <View style={stylesSAV.containerBtn}>
+            <Button title="Go Back" onPress={go_Back} color="#40e0d0" />
+          </View>
+          <Separator />
         </View>
-        <Separator />
-        <View style={stylesSAV.containerBtn}>
-          <Button title="Take Picture" onPress={takePicture} color="#40e0d0" />
-        </View>
-        <Separator />
-        <View style={stylesSAV.containerBtn}>
-          <Button title="Upload Image" onPress={uploadImage} color="#40e0d0" />
-        </View>
-        <Separator />
-        <View style={stylesSAV.containerBtn}>
-          <Button title="Go Back" onPress={go_Back} color="#40e0d0" />
-        </View>
-        <Separator />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
