@@ -7,8 +7,9 @@ import {
   Image,
   Button,
   Alert,
-  FlatList,
+  ScrollView,
 } from 'react-native';
+import PatDiagInfo from './PatDiagInfo';
 
 export default class PatientInfo extends Component {
   constructor(props) {
@@ -16,32 +17,57 @@ export default class PatientInfo extends Component {
     this.state = {
       // Object
       patientInfo: this.props.route.params.item,
-      diagnostics: [],
+      diagnostic: 0,
+      medicInfo: 0,
     };
   }
 
   componentDidMount() {
-    this.getPatientDiags();
+    this.getPatientDiag();
   }
 
-  getPatientDiags() {
+  getPatientDiag() {
     let _this = this;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
       console.log(xhttp.responseText);
       if (this.readyState == 4 && this.status == 200) {
         // Typical action to be performed when the document is ready:
-        if (xhttp.responseText == "QueryError") {
+        if (xhttp.responseText == 'QueryError') {
           Alert.alert('Something went wrong, try again');
         } else if (xhttp.responseText != 0) {
-          _this.setState({diagnostics: JSON.parse(xhttp.responseText)});
+          _this.setState({diagnostic: JSON.parse(xhttp.responseText)[0]});
+          _this.getMedicInfo();
         }
       }
     };
     xhttp.open(
       'GET',
-      'https://dentaldiagsystem.000webhostapp.com/phpScripts/patient_diags.php?id=' +
+      'https://dentaldiagsystem.000webhostapp.com/phpScripts/patient_diag.php?id=' +
         this.state.patientInfo.idPaciente,
+      true,
+    );
+    xhttp.send();
+  }
+
+  getMedicInfo() {
+    let _this = this;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      console.log(xhttp.responseText);
+      if (this.readyState == 4 && this.status == 200) {
+        // Typical action to be performed when the document is ready:
+        if (xhttp.responseText == 'QueryError') {
+          Alert.alert('Something went wrong, try again');
+        } else if (xhttp.responseText != 0) {
+          _this.setState({medicInfo: JSON.parse(xhttp.responseText)[0]});
+        }
+      }
+    };
+    xhttp.open(
+      'GET',
+      'https://dentaldiagsystem.000webhostapp.com/phpScripts/diag_author.php?id=' +
+        this.state.diagnostic.id_medico,
       true,
     );
     xhttp.send();
@@ -51,109 +77,111 @@ export default class PatientInfo extends Component {
     const Separator = () => <View style={stylesSAV.separator} />;
 
     return (
-      <View style={stylesSAV.vw}>
-        <FlatList
-          ListHeaderComponent={
-            
-            <View style={stylesSAV.container}>
-              <SafeAreaView style={stylesSAV.containerImg}>
-                <Image
-                  style={stylesSAV.imge}
-                  source={require('./src/imgs/logod.png')}
-                />
-              </SafeAreaView>
+      <ScrollView>
+        <View style={stylesSAV.container}>
+          <SafeAreaView style={stylesSAV.containerImg}>
+            <Image
+              style={stylesSAV.imge}
+              source={require('./src/imgs/logod.png')}
+            />
+          </SafeAreaView>
 
-              <View style={stylesSAV.vw}>
-                <Separator />
-                <View style={stylesSAV.containerBtn}>
-                  <Button
-                    onPress={() => this.props.navigation.goBack()}
-                    title="Go Back"
-                    color="#40e0d0"
-                  />
-                </View>
-                <Separator />
-                <View style={stylesSAV.containerBtn}>
-                  <Button
-                    onPress={() => this.props.navigation.navigate('Log In')}
-                    title="Main Menu"
-                    color="#40e0d0"
-                  />
-                </View>
-                <Separator />
-                <Text style={stylesSAV.title}>Only authorized personnel</Text>
-
-                <Separator />
-
-                <Text style={stylesSAV.textTitle}> PATIENT DATA {'\n'}</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={stylesSAV.txtAttrib}>ID: </Text>
-                  <Text style={stylesSAV.txtValue}>
-                    {this.state.patientInfo["idPaciente"]}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={stylesSAV.txtAttrib}>Nombre: </Text>
-                  <Text style={stylesSAV.txtValue}>
-                    {this.state.patientInfo["nombre"]}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={stylesSAV.txtAttrib}>Apellidos: </Text>
-                  <Text style={stylesSAV.txtValue}>
-                    {this.state.patientInfo["apellido"]}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={stylesSAV.txtAttrib}>Fecha nacimiento: </Text>
-                  <Text style={stylesSAV.txtValue}>
-                    {this.state.patientInfo["fecha_nacimiento"]}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={stylesSAV.txtAttrib}>Telefono: </Text>
-                  <Text style={stylesSAV.txtValue}>
-                    {this.state.patientInfo["telefono"]}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={stylesSAV.txtAttrib}>Email: </Text>
-                  <Text style={stylesSAV.txtValue}>
-                    {this.state.patientInfo["email"]}
-                  </Text>
-                </View>
-
-                <Separator />
-
-                <View>
-                  <Text style={stylesSAV.textTitle}>
-                    PATIENT DIAGNOSIS {'\n'} RECORDS
-                    {`${this.state.diagnostics == 0 ? "\n\n[¡] No Diags Records Found" : "\n"}`}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          }
-
-          data={this.state.diagnostics}
-          ItemSeparatorComponent={Separator}
-          renderItem={({item}) => (
+          <View style={stylesSAV.vw}>
+            <Separator />
             <View style={stylesSAV.containerBtn}>
               <Button
-                title={item.fecha_diagnostico + ' ID: ' + item.idDiagnostico + ' ' + item.estado}
+                onPress={() => this.props.navigation.goBack()}
+                title="Go Back"
                 color="#40e0d0"
-                onPress={() => this.props.navigation.navigate('DiagInfo', {item})}
               />
             </View>
-          )}
-
-          ListFooterComponent={
-            <View>
-              <Separator/>
+            <Separator />
+            <View style={stylesSAV.containerBtn}>
+              <Button
+                onPress={() => this.props.navigation.navigate('Log In')}
+                title="Main Menu"
+                color="#40e0d0"
+              />
             </View>
-          }
-        />
-      </View>
+            <Separator />
+            <Text style={stylesSAV.title}>Only authorized personnel</Text>
+
+            <Separator />
+
+            <Text style={stylesSAV.textTitle}> PATIENT DATA {'\n'}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={stylesSAV.txtAttrib}>ID: </Text>
+              <Text style={stylesSAV.txtValue}>
+                {this.state.patientInfo['idPaciente']}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={stylesSAV.txtAttrib}>Nombre: </Text>
+              <Text style={stylesSAV.txtValue}>
+                {this.state.patientInfo['nombre']}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={stylesSAV.txtAttrib}>Apellidos: </Text>
+              <Text style={stylesSAV.txtValue}>
+                {this.state.patientInfo['apellido']}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={stylesSAV.txtAttrib}>Fecha nacimiento: </Text>
+              <Text style={stylesSAV.txtValue}>
+                {this.state.patientInfo['fecha_nacimiento']}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={stylesSAV.txtAttrib}>Telefono: </Text>
+              <Text style={stylesSAV.txtValue}>
+                {this.state.patientInfo['telefono']}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={stylesSAV.txtAttrib}>Email: </Text>
+              <Text style={stylesSAV.txtValue}>
+                {this.state.patientInfo['email']}
+              </Text>
+            </View>
+
+            <Separator />
+
+            <View>
+              <Text style={stylesSAV.textTitle}>
+                PATIENT DIAGNOSIS {'\n'} RECORD
+              </Text>
+              <View style={stylesSAV.containerBtn}>
+                <Button
+                  onPress={() =>
+                    /*this.props.navigation.navigate('Log In')*/ console.log(
+                      'Modificar diagnostico',
+                    )
+                  }
+                  title={
+                    this.state.diagnostic == 0
+                      ? 'Make Diagnosis'
+                      : 'Modify Diagnosis'
+                  }
+                  color="#40e0d0"
+                />
+              </View>
+              {this.state.diagnostic == 0 ? (
+                <Text style={stylesSAV.textTitle}>
+                  {'\n\n[¡]'} No Diag Record Found
+                </Text>
+              ) : (
+                <PatDiagInfo
+                  diagInfo={this.state.diagnostic}
+                  medicInfo={this.state.medicInfo}
+                />
+              )}
+            </View>
+            <Separator />
+          </View>
+        </View>
+      </ScrollView>
     );
   }
 }

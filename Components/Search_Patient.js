@@ -75,9 +75,9 @@ export default class Search_Patient extends Component {
                 <Button
                   title={item.apellido + ' ' + item.nombre}
                   color="#40e0d0"
-                  onPress={() =>
+                  onPress={() => {
                     this.props.navigation.navigate('PatientInfo', {item})
-                  }
+                  }}
                 />
               </View>
             )}
