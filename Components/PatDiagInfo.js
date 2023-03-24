@@ -12,6 +12,10 @@ export default class PatDiagInfo extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log(this.props.diagInfo)
+  }
+
   render() {
   const Separator = () => <View style={stylesSAV.separator} />;
 
@@ -34,7 +38,8 @@ export default class PatDiagInfo extends Component {
       </View>
       <View style={{flexDirection: 'row'}}>
         <Text style={stylesSAV.txtAttrib}>Medico ID: </Text>
-        <Text style={stylesSAV.txtValue}>{this.props.diagInfo.id_medico}</Text>
+        <Text style={stylesSAV.txtValue}>
+          {this.props.diagInfo.id_medico}</Text>
       </View>
       <View style={{flexDirection: 'row'}}>
         <Text style={stylesSAV.txtAttrib}>Fecha de diagnostico: </Text>
@@ -44,7 +49,8 @@ export default class PatDiagInfo extends Component {
       </View>
       <View style={{flexDirection: 'row'}}>
         <Text style={stylesSAV.txtAttrib}>Estado: </Text>
-        <Text style={stylesSAV.txtValue}>{this.props.diagInfo.estado}</Text>
+        <Text style={stylesSAV.txtValue}>
+          {this.props.diagInfo.estado}</Text>
       </View>
       <View style={{flexDirection: 'row'}}>
         <Text style={stylesSAV.txtAttrib}>Descripción: </Text>

@@ -105,6 +105,7 @@ const stylesSAV = StyleSheet.create({
   vw: {
     backgroundColor: '#e6e6fa',
     marginTop: 10,
+    flex: 1,
   },
   imge: {
     width: 140,

@@ -154,10 +154,12 @@ export default class PatientInfo extends Component {
               </Text>
               <View style={stylesSAV.containerBtn}>
                 <Button
-                  onPress={() =>
-                    /*this.props.navigation.navigate('Log In')*/ console.log(
-                      'Modificar diagnostico',
-                    )
+                  onPress={() => {
+                    /*this.props.navigation.navigate('Log In')*/
+                    // console.log('Modificar diagnostico');
+                    this.props.navigation.navigate('ImagePicker', {idPaciente: this.state.diagnostic.id_paciente, 
+                    idMedico: this.state.diagnostic.id_medico})
+                  }
                   }
                   title={
                     this.state.diagnostic == 0

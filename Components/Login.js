@@ -23,7 +23,7 @@ export default class Login extends Component {
 
     const new_Patient_Button = () => {
       let _this = this;
-      _this.props.navigation.navigate('Register_Patient');
+      _this.props.navigation.navigate('Register_Patient', {medicId: _this.props.route.params.medicId});
     };
 
     const searchPatient_Button = () => {
