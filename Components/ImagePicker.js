@@ -3,10 +3,16 @@ import React, {useState} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const ImagePicker = ({navigation: {navigate}}) => {
-  //const [patInfo, setPatInfo] = useState(this.props.route.params.item);
+const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
+  const [patientId, setPatientId] = useState(route.params.idPaciente);
+  const [medicId, setMedicId] = useState(route.params.idMedico);
+  const [diagnostic, setDiagnostic] = useState('');
+
+  console.log(patientId, medicId);
+
   const [image, setImage] = useState('https://via.placeholder.com/224');
   //method to select an image of the gallery
+
   const selectImage = () => {
     const options = {
       title: 'Select an image',
@@ -26,6 +32,7 @@ const ImagePicker = ({navigation: {navigate}}) => {
       }
     });
   };
+
   //method to access to the camera and take a picture
   const takePicture = () => {
     const options = {
@@ -48,6 +55,7 @@ const ImagePicker = ({navigation: {navigate}}) => {
       }
     });
   };
+
   //method to upload the image to the server
   const generateDiagnosis = async () => {
     //take on local variable the uri of the image
@@ -94,6 +102,29 @@ const ImagePicker = ({navigation: {navigate}}) => {
       }
     }
   };
+
+  const getPatientDiag = () => {
+    let _this = this;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      console.log(xhttp.responseText);
+      if (this.readyState == 4 && this.status == 200) {
+        // Typical action to be performed when the document is ready:
+        if (xhttp.responseText == 'QueryError') {
+          Alert.alert('Something went wrong, try again');
+        } else if (xhttp.responseText != 0) {
+          _this.setState({diagnostic: JSON.parse(xhttp.responseText)[0]});
+        }
+      }
+    };
+    xhttp.open(
+      'GET',
+      'https://dentaldiagsystem.000webhostapp.com/phpScripts/patient_diag.php?id=' +
+        this.state.patientId,
+      true,
+    );
+    xhttp.send();
+  }
 
   //Function for a separator for buttons
   const Separator = () => <View style={stylesSAV.separator} />;
@@ -151,7 +182,7 @@ const ImagePicker = ({navigation: {navigate}}) => {
           </View>
           <Separator />
           <View style={stylesSAV.containerBtn}>
-            <Button title="Go Back" onPress={go_Back} color="#40e0d0" />
+            <Button title="Go Back" onPress={() => goBack()} color="#40e0d0" />
           </View>
           <Separator />
         </View>

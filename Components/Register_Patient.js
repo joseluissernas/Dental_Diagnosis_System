@@ -17,9 +17,14 @@ export default class Register_Patient extends Component {
     birthday: '',
     phone: '',
     email: '',
+    patData: '',
   };
+
+  
   render() {
+    console.log(this.props.route.params.medicId);
     //Function for the button to register patient
+
     const register_Patient_Button = () => {
       let _this = this;
       var xhttp = new XMLHttpRequest();
@@ -29,13 +34,15 @@ export default class Register_Patient extends Component {
           // Typical action to be performed when the document is ready:
           if (xhttp.responseText == 0) {
             Alert.alert('Something went wrong, try again');
-            _this.props.navigation.navigate('ImagePicker');
+            // _this.props.navigation.navigate('ImagePicker');
           } else if (xhttp.responseText == 2) {
             Alert.alert('The patient already exists');
           } else if (xhttp.responseText == 1) {
             Alert.alert('Succesfully registered patient');
             console.log('Paciente registrado exitosamente');
-            _this.props.navigation.navigate('ImagePicker');
+            retrieve_Patient_id();
+            _this.props.navigation.navigate('ImagePicker', {idPaciente: _this.state.patData.idPaciente, 
+            idMedico: _this.props.route.params.medicId});
           }
         }
       };
@@ -55,6 +62,45 @@ export default class Register_Patient extends Component {
       );
       xhttp.send();
     };
+
+    // const register_Patient_Button = () => {
+    //   retrieve_Patient_id();
+    //   this.props.navigation.navigate('ImagePicker', {idPaciente: this.state.patData.idPaciente, 
+    //             idMedico: this.props.route.params.medicId});
+    // }
+
+    const retrieve_Patient_id = () => {
+      let _this = this;
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        console.log(this.status);
+        if (this.readyState == 4 && this.status == 200) {
+          // Typical action to be performed when the document is ready:
+          if (xhttp.responseText == 0) {
+            Alert.alert('Something went wrong, try again');
+            _this.props.navigation.navigate('ImagePicker');
+          } else if (xhttp.responseText == 1) {
+            console.log(xhttp.responseText);
+            _this.setState({patData: xhttp.responseText})
+          }
+        }
+      };
+      xhttp.open(
+        'GET',
+        'https://dentaldiagsystem.000webhostapp.com/phpScripts/search_patient.php?nombre=' +
+          _this.state.name +
+          '&apellido=' +
+          _this.state.lastname +
+          '&fecha_nacimiento=' +
+          _this.state.birthday +
+          '&telefono=' +
+          _this.state.phone +
+          '&email=' +
+          _this.state.email,
+        true,
+      );
+      xhttp.send();
+    }
 
     //Function temporary to go back
     const go_Back = () => {
@@ -130,7 +176,7 @@ export default class Register_Patient extends Component {
             </View>
             <Separator />
             <View style={stylesSAV.containerBtn}>
-              <Button onPress={go_Back} title="Go Back" color="#40e0d0" />
+              <Button onPress={() => this.props.navigation.goBack()} title="Go Back" color="#40e0d0" />
             </View>
             <Separator />
           </View>

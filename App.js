@@ -23,7 +23,6 @@ import Register_Patient from './Components/Register_Patient';
 import ImagePicker from './Components/ImagePicker';
 import Search_Patient from './Components/Search_Patient';
 import PatientInfo from './Components/PatientInfo';
-import PatDiagInfo from './Components/PatDiagInfo';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Appbar, Menu} from 'react-native-paper';
@@ -53,7 +52,6 @@ export default function App() {
         <Stack.Screen name="ImagePicker" component={ImagePicker} />
         <Stack.Screen name="Search_Patient" component={Search_Patient} />
         <Stack.Screen name="PatientInfo" component={PatientInfo} />
-        <Stack.Screen name="DiagInfo" component={PatDiagInfo} />
       </Stack.Navigator>
     </NavigationContainer>
   );

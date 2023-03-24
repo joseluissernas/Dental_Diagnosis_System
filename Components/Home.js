@@ -47,6 +47,7 @@ export default class Home extends Component {
             var lastname = separateData[1];
             var email = separateData[2];
             var passwd = separateData[3];
+            var userId = separateData[4];
             //save the medic id pending
             global.password = passwd;
             var checkuser = name + ' ' + lastname;
@@ -54,7 +55,7 @@ export default class Home extends Component {
             if (email == _this.state.username) {
               Alert.alert('Welcome' + ' ' + checkuser);
               resetValues();
-              _this.props.navigation.navigate('Log In');
+              _this.props.navigation.navigate('Log In', {medicId: userId});
               console.log('logButton');
             }
           }
