@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Image,
   Alert,
+  ScrollView,
 } from 'react-native';
 
 export default class Search_Patient extends Component {

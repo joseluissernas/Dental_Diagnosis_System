@@ -103,6 +103,13 @@ const ImagePicker = ({navigation: {navigate}}) => {
     navigate('Register_Patient');
   };
 
+  //Function to save the diagnosis
+  /*
+  const saveResults = () {
+
+  };
+  */
+
   return (
     <ScrollView>
       <View style={stylesSAV.container}>
