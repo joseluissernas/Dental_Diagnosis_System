@@ -5,10 +5,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
   const [patientId, setPatientId] = useState(route.params.idPaciente);
-  const [medicId, setMedicId] = useState(route.params.idMedico);
+  const [estadoDiag, setEstadoDiag] = useState('');
+  const [coment, setComent] = useState('');
   const [diagnostic, setDiagnostic] = useState('');
 
-  console.log(patientId, medicId);
+  console.log(patientId, global.medicId);
 
   const [image, setImage] = useState('https://via.placeholder.com/224');
   //method to select an image of the gallery
@@ -80,7 +81,7 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
       console.log(filename);
       console.log(type);
       //fetch to post the image to the server
-      let res = await fetch('http://187.198.58.92:4000/predict', {
+      let res = await fetch('http://192.168.1.72:4000/predict', {
         method: 'POST',
         header: {
           'Content-Type': 'multipart/form-data',
@@ -91,36 +92,69 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
       console.log(responseJson);
       if (responseJson.message == '0') {
         Alert.alert('Posible gingivitis' + responseJson.message);
+        setEstadoDiag('Posible gingivitis');
       } else if (responseJson.message == '1') {
         Alert.alert('Posible gingivitis y sarro' + responseJson.message);
+        setEstadoDiag('Posible gingivitis y sarro');
       } else if (responseJson.message == '2') {
         Alert.alert('Posible dentadura sana' + responseJson.message);
+        setEstadoDiag('Posible dentadura sana');
       } else if (responseJson.message == '3') {
         Alert.alert('Posible dentadura con sarro' + responseJson.message);
+        setEstadoDiag('Posible dentadura con sarro');
       } else {
         Alert.alert('Something went wrong ' + responseJson.message);
       }
     }
   };
 
+  const saveResults = () => {
+    getPatientDiag();
+    const today = new Date();
+    var date = (`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`);
+    console.log('date:' + date);
+    let _this = this;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      console.log('ImagePicker_SaveResults:' + xhttp.responseText);
+      if (this.readyState == 4 && this.status == 200) {
+        // Typical action to be performed when the document is ready:
+        if (xhttp.responseText == '1') {
+          Alert.alert('Diagnosis succesfully saved');
+        } else if (xhttp.responseText != '1') {
+          Alert.alert('Something went wrong, try again');
+        }
+      }
+    };
+    xhttp.open(
+      'GET',
+      'https://dentaldiagsystem.000webhostapp.com/phpScripts/register_diagnosis.php?fecha_diagnostico=' + date +
+        '&id_paciente=' + patientId +
+        '&id_medico=' + global.medicId +
+        '&estado=' + estadoDiag +
+        '&descripcion=' + coment,
+      true,
+    );
+    xhttp.send();
+  }
+
   const getPatientDiag = () => {
     let _this = this;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-      console.log(xhttp.responseText);
+      console.log('ImagePicker_getPatientDiag: ' + xhttp.responseText);
       if (this.readyState == 4 && this.status == 200) {
         // Typical action to be performed when the document is ready:
-        if (xhttp.responseText == 'QueryError') {
-          Alert.alert('Something went wrong, try again');
-        } else if (xhttp.responseText != 0) {
-          _this.setState({diagnostic: JSON.parse(xhttp.responseText)[0]});
+        if (xhttp.responseText != '0') {
+          setDiagnostic(JSON.parse(xhttp.responseText)[0]);
+          setComent(diagnostic.estado);
         }
       }
     };
     xhttp.open(
       'GET',
       'https://dentaldiagsystem.000webhostapp.com/phpScripts/patient_diag.php?id=' +
-        this.state.patientId,
+        patientId,
       true,
     );
     xhttp.send();
@@ -133,13 +167,6 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
   const go_Back = () => {
     navigate('Register_Patient');
   };
-
-  //Function to save the diagnosis
-  /*
-  const saveResults = () {
-
-  };
-  */
 
   return (
     <ScrollView>
@@ -176,7 +203,7 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
           <View style={stylesSAV.containerBtn}>
             <Button
               title="Save Results"
-              //onPress={saveResults}
+              onPress={saveResults}
               color="#40e0d0"
             />
           </View>

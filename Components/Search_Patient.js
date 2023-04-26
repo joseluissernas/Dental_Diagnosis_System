@@ -30,7 +30,7 @@ export default class Search_Patient extends Component {
       // console.log(xhttp.responseText);
       if (this.readyState == 4 && this.status == 200) {
         // Typical action to be performed when the document is ready:
-        if (xhttp.responseText == 0) {
+        if (xhttp.responseText == '0') {
           Alert.alert('Something went wrong, try again');
         } else {
           _this.setState({patientList: JSON.parse(xhttp.responseText)});

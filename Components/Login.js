@@ -23,7 +23,7 @@ export default class Login extends Component {
 
     const new_Patient_Button = () => {
       let _this = this;
-      _this.props.navigation.navigate('Register_Patient', {medicId: _this.props.route.params.medicId});
+      _this.props.navigation.navigate('Register_Patient');
     };
 
     const searchPatient_Button = () => {
@@ -61,7 +61,7 @@ export default class Login extends Component {
             </View>
             <Separator />
             <View style={stylesSAV.containerBtn}>
-              <Button onPress={homeButton} title="Home" color="#40e0d0" />
+              <Button onPress={homeButton} title="Log Out" color="#40e0d0" />
             </View>
             <Separator />
             <Text style={stylesSAV.title}>Only authorized personnel</Text>

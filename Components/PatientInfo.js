@@ -24,20 +24,20 @@ export default class PatientInfo extends Component {
 
   componentDidMount() {
     this.getPatientDiag();
+    this.getMedicInfo();
   }
 
   getPatientDiag() {
     let _this = this;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-      console.log(xhttp.responseText);
+      // console.log(xhttp.responseText);
       if (this.readyState == 4 && this.status == 200) {
         // Typical action to be performed when the document is ready:
         if (xhttp.responseText == 'QueryError') {
           Alert.alert('Something went wrong, try again');
-        } else if (xhttp.responseText != 0) {
+        } else if (xhttp.responseText != '0') {
           _this.setState({diagnostic: JSON.parse(xhttp.responseText)[0]});
-          _this.getMedicInfo();
         }
       }
     };
@@ -54,7 +54,7 @@ export default class PatientInfo extends Component {
     let _this = this;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-      console.log(xhttp.responseText);
+      // console.log(xhttp.responseText);
       if (this.readyState == 4 && this.status == 200) {
         // Typical action to be performed when the document is ready:
         if (xhttp.responseText == 'QueryError') {
@@ -67,7 +67,7 @@ export default class PatientInfo extends Component {
     xhttp.open(
       'GET',
       'https://dentaldiagsystem.000webhostapp.com/phpScripts/diag_author.php?id=' +
-        this.state.diagnostic.id_medico,
+        global.medicId,
       true,
     );
     xhttp.send();
@@ -157,8 +157,7 @@ export default class PatientInfo extends Component {
                   onPress={() => {
                     /*this.props.navigation.navigate('Log In')*/
                     // console.log('Modificar diagnostico');
-                    this.props.navigation.navigate('ImagePicker', {idPaciente: this.state.diagnostic.id_paciente, 
-                    idMedico: this.state.diagnostic.id_medico})
+                    this.props.navigation.navigate('ImagePicker', {idPaciente: this.state.patientInfo.idPaciente})
                   }
                   }
                   title={
