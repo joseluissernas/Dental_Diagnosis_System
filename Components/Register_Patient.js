@@ -25,7 +25,6 @@ export default class Register_Patient extends Component {
     patData: '',
   };
 
-  
   render() {
     //Function for the button to register patient
 
@@ -45,7 +44,14 @@ export default class Register_Patient extends Component {
             Alert.alert('Succesfully registered patient');
             console.log('Paciente registrado exitosamente');
             retrieve_Patient_id();
-            _this.props.navigation.navigate('ImagePicker', {idPaciente: _this.state.patData.idPaciente});
+            _this.props.navigation.navigate('ImagePicker', {
+              idPaciente: _this.state.patData.idPaciente,
+              // nombre: this.state.patData.nombre,
+              // apellido: this.state.patData.apellido,
+              // fecha_nacimiento: this.state.patData.fecha_nacimiento,
+              // telefono: this.state.patData.telefono,
+              // email: this.state.patData.email,
+            });
           }
         }
       };
@@ -65,7 +71,7 @@ export default class Register_Patient extends Component {
       );
       xhttp.send();
     };
-    
+
     const retrieve_Patient_id = () => {
       let _this = this;
       var xhttp = new XMLHttpRequest();
@@ -98,15 +104,15 @@ export default class Register_Patient extends Component {
         true,
       );
       xhttp.send();
-    }
+    };
 
     // const register_Patient_Button = () => {
     //   retrieve_Patient_id();
-    //   this.props.navigation.navigate('ImagePicker', {idPaciente: this.state.patData.idPaciente, 
+    //   this.props.navigation.navigate('ImagePicker', {idPaciente: this.state.patData.idPaciente,
     //             idMedico: this.props.route.params.medicId});
     // }
 
-    //Function temporary to go back
+    //Function to go back
     const go_Back = () => {
       let _this = this;
       _this.props.navigation.navigate('Log In');
@@ -180,7 +186,11 @@ export default class Register_Patient extends Component {
             </View>
             <Separator />
             <View style={stylesSAV.containerBtn}>
-              <Button onPress={() => this.props.navigation.goBack()} title="Go Back" color="#40e0d0" />
+              <Button
+                onPress={() => this.props.navigation.goBack()}
+                title="Go Back"
+                color="#40e0d0"
+              />
             </View>
             <Separator />
           </View>

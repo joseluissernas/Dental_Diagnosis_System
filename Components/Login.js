@@ -17,8 +17,19 @@ export default class Login extends Component {
     //Function for the button to go to the Home screen
     const homeButton = () => {
       let _this = this;
+      global.medicEmail = ' ';
+      global.medicPassword = ' ';
+      global.medicId = ' ';
       _this.props.navigation.navigate('Home');
-      console.log('homeButton');
+      console.log(
+        'homeButton' +
+          global.medicEmail +
+          ': ' +
+          global.medicPassword +
+          ': ' +
+          global.medicId +
+          ': ',
+      );
     };
 
     const new_Patient_Button = () => {

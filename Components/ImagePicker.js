@@ -1,15 +1,38 @@
-import {View, Button, Image, StyleSheet, Alert, ScrollView} from 'react-native';
+import {
+  View,
+  Button,
+  Image,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  Text,
+} from 'react-native';
 import React, {useState} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
   const [patientId, setPatientId] = useState(route.params.idPaciente);
+  const [patientName, setPatientName] = useState(route.params.nombre);
+  const [patientLastName, setPatientLastName] = useState(route.params.apellido);
+  const [patientBirth, setPatientBirth] = useState(
+    route.params.fecha_nacimiento,
+  );
+  const [patientPhone, setPatientPhone] = useState(route.params.telefono);
+  const [patientEmail, setPatientEmail] = useState(route.params.email);
   const [estadoDiag, setEstadoDiag] = useState('');
   const [coment, setComent] = useState('');
   const [diagnostic, setDiagnostic] = useState('');
 
-  console.log(patientId, global.medicId);
+  console.log(
+    patientId,
+    patientName,
+    patientLastName,
+    patientBirth,
+    patientPhone,
+    patientEmail,
+    global.medicId,
+  );
 
   const [image, setImage] = useState('https://via.placeholder.com/224');
   //method to select an image of the gallery
@@ -111,7 +134,9 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
   const saveResults = () => {
     getPatientDiag();
     const today = new Date();
-    var date = (`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`);
+    var date = `${today.getFullYear()}-${
+      today.getMonth() + 1
+    }-${today.getDate()}`;
     console.log('date:' + date);
     let _this = this;
     var xhttp = new XMLHttpRequest();
@@ -128,15 +153,20 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
     };
     xhttp.open(
       'GET',
-      'https://dentaldiagsystem.000webhostapp.com/phpScripts/register_diagnosis.php?fecha_diagnostico=' + date +
-        '&id_paciente=' + patientId +
-        '&id_medico=' + global.medicId +
-        '&estado=' + estadoDiag +
-        '&descripcion=' + coment,
+      'https://dentaldiagsystem.000webhostapp.com/phpScripts/register_diagnosis.php?fecha_diagnostico=' +
+        date +
+        '&id_paciente=' +
+        patientId +
+        '&id_medico=' +
+        global.medicId +
+        '&estado=' +
+        estadoDiag +
+        '&descripcion=' +
+        coment,
       true,
     );
     xhttp.send();
-  }
+  };
 
   const getPatientDiag = () => {
     let _this = this;
@@ -158,7 +188,7 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
       true,
     );
     xhttp.send();
-  }
+  };
 
   //Function for a separator for buttons
   const Separator = () => <View style={stylesSAV.separator} />;
@@ -174,6 +204,30 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
         <SafeAreaView style={stylesSAV.containerImg}>
           <Image style={stylesSAV.imge} source={{uri: image}} />
         </SafeAreaView>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={stylesSAV.txtAttrib}>ID: </Text>
+          <Text style={stylesSAV.txtValue}>{patientId}</Text>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={stylesSAV.txtAttrib}>Nombre: </Text>
+          <Text style={stylesSAV.txtValue}>{patientName}</Text>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={stylesSAV.txtAttrib}>Apellidos: </Text>
+          <Text style={stylesSAV.txtValue}>{patientLastName}</Text>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={stylesSAV.txtAttrib}>fecha nacimiento: </Text>
+          <Text style={stylesSAV.txtValue}>{patientBirth}</Text>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={stylesSAV.txtAttrib}>Telefono: </Text>
+          <Text style={stylesSAV.txtValue}>{patientPhone}</Text>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={stylesSAV.txtAttrib}>Email: </Text>
+          <Text style={stylesSAV.txtValue}>{patientEmail}</Text>
+        </View>
         <View style={stylesSAV.vw}>
           <Separator />
           <View style={stylesSAV.containerBtn}>
@@ -252,5 +306,9 @@ const stylesSAV = StyleSheet.create({
     marginLeft: '10%',
     marginRight: '10%',
     paddingTop: '2%',
+  },
+  txtAttrib: {
+    fontSize: 16,
+    color: 'black',
   },
 });

@@ -157,9 +157,15 @@ export default class PatientInfo extends Component {
                   onPress={() => {
                     /*this.props.navigation.navigate('Log In')*/
                     // console.log('Modificar diagnostico');
-                    this.props.navigation.navigate('ImagePicker', {idPaciente: this.state.patientInfo.idPaciente})
-                  }
-                  }
+                    this.props.navigation.navigate('ImagePicker', {
+                      idPaciente: this.state.patientInfo.idPaciente,
+                      nombre: this.state.patientInfo.nombre,
+                      apellido: this.state.patientInfo.apellido,
+                      fecha_nacimiento: this.state.patientInfo.fecha_nacimiento,
+                      telefono: this.state.patientInfo.telefono,
+                      email: this.state.patientInfo.email,
+                    });
+                  }}
                   title={
                     this.state.diagnostic == 0
                       ? 'Make Diagnosis'

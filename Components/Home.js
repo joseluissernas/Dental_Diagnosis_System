@@ -49,8 +49,16 @@ export default class Home extends Component {
             var passwd = separateData[3];
             var userId = separateData[4];
             //save the medic id pending
-            global.password = passwd;
+            global.medicEmail = email;
+            global.medicPassword = passwd;
             global.medicId = userId;
+            console.log(
+              global.medicEmail +
+                ' ' +
+                global.medicPassword +
+                ' ' +
+                global.medicId,
+            );
             var checkuser = name + ' ' + lastname;
             console.log(checkuser);
             if (email == _this.state.username) {

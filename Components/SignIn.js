@@ -27,16 +27,6 @@ export default class SignIn extends Component {
     idcard: '',
   };
   render() {
-    //Appbar
-    const MyAppbar = () => (
-      <Appbar style={stylesSAV.bottom}>
-        <Appbar.Action
-          icon="archive"
-          onPress={() => console.log('Pressed archive')}
-        />
-      </Appbar>
-    );
-
     //Function for the button to register user
     const registerButton = () => {
       let _this = this;
@@ -188,9 +178,6 @@ export default class SignIn extends Component {
               <Text style={stylesSAV.title}>Only authorized personnel</Text>
             </View>
             <Separator />
-            <View style={stylesSAV.containerBottom}>
-              <MyAppbar />
-            </View>
           </View>
         </View>
       </ScrollView>
@@ -253,12 +240,6 @@ const stylesSAV = StyleSheet.create({
     paddingTop: '2%',
   },
   containerTxt: {
-    height: 50,
-    marginLeft: '6%',
-    marginRight: '6%',
-    paddingTop: '2%',
-  },
-  containerBottom: {
     height: 50,
     marginLeft: '6%',
     marginRight: '6%',
