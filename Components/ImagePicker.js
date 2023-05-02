@@ -6,6 +6,7 @@ import {
   Alert,
   ScrollView,
   Text,
+  TextInput,
 } from 'react-native';
 import React, {useState} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -23,9 +24,30 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
   const [estadoDiag, setEstadoDiag] = useState('');
   const [coment, setComent] = useState('');
   const [diagnostic, setDiagnostic] = useState('');
+  const [enable, setEnable] = useState(true);
+
+  //Function to reset values to initial state
+  const resetValues = () => {
+    setPatientId(' ');
+    setPatientName(' ');
+    setPatientLastName(' ');
+    setPatientBirth(' ');
+    setPatientPhone(' ');
+    setPatientEmail(' ');
+    setEstadoDiag(' ');
+    setComent(' ');
+    setEnable(true);
+    navigate('Log In');
+    console.log('ImagePicker: resetValues');
+  };
+
+  //Function to handle the state of the Save Results button
+  const handleEnableState = () => {
+    setEnable(false);
+  };
 
   console.log(
-    patientId,
+    'ImagePicker: ' + patientId,
     patientName,
     patientLastName,
     patientBirth,
@@ -34,9 +56,10 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
     global.medicId,
   );
 
+  //To show a default image
   const [image, setImage] = useState('https://via.placeholder.com/224');
-  //method to select an image of the gallery
 
+  //method to select an image of the gallery
   const selectImage = () => {
     const options = {
       title: 'Select an image',
@@ -104,7 +127,7 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
       console.log(filename);
       console.log(type);
       //fetch to post the image to the server
-      let res = await fetch('http://192.168.1.72:4000/predict', {
+      let res = await fetch('http://192.168.100.103:4000/predict', {
         method: 'POST',
         header: {
           'Content-Type': 'multipart/form-data',
@@ -116,15 +139,19 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
       if (responseJson.message == '0') {
         Alert.alert('Posible gingivitis' + responseJson.message);
         setEstadoDiag('Posible gingivitis');
+        handleEnableState();
       } else if (responseJson.message == '1') {
         Alert.alert('Posible gingivitis y sarro' + responseJson.message);
         setEstadoDiag('Posible gingivitis y sarro');
+        handleEnableState();
       } else if (responseJson.message == '2') {
         Alert.alert('Posible dentadura sana' + responseJson.message);
         setEstadoDiag('Posible dentadura sana');
+        handleEnableState();
       } else if (responseJson.message == '3') {
         Alert.alert('Posible dentadura con sarro' + responseJson.message);
         setEstadoDiag('Posible dentadura con sarro');
+        handleEnableState();
       } else {
         Alert.alert('Something went wrong ' + responseJson.message);
       }
@@ -132,12 +159,11 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
   };
 
   const saveResults = () => {
-    getPatientDiag();
     const today = new Date();
     var date = `${today.getFullYear()}-${
       today.getMonth() + 1
     }-${today.getDate()}`;
-    console.log('date:' + date);
+    console.log(date, patientId, global.medicId, estadoDiag, coment);
     let _this = this;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -146,6 +172,7 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
         // Typical action to be performed when the document is ready:
         if (xhttp.responseText == '1') {
           Alert.alert('Diagnosis succesfully saved');
+          resetValues();
         } else if (xhttp.responseText != '1') {
           Alert.alert('Something went wrong, try again');
         }
@@ -168,35 +195,8 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
     xhttp.send();
   };
 
-  const getPatientDiag = () => {
-    let _this = this;
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      console.log('ImagePicker_getPatientDiag: ' + xhttp.responseText);
-      if (this.readyState == 4 && this.status == 200) {
-        // Typical action to be performed when the document is ready:
-        if (xhttp.responseText != '0') {
-          setDiagnostic(JSON.parse(xhttp.responseText)[0]);
-          setComent(diagnostic.estado);
-        }
-      }
-    };
-    xhttp.open(
-      'GET',
-      'https://dentaldiagsystem.000webhostapp.com/phpScripts/patient_diag.php?id=' +
-        patientId,
-      true,
-    );
-    xhttp.send();
-  };
-
   //Function for a separator for buttons
   const Separator = () => <View style={stylesSAV.separator} />;
-
-  //Function temporary to go back
-  const go_Back = () => {
-    navigate('Register_Patient');
-  };
 
   return (
     <ScrollView>
@@ -217,7 +217,7 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
           <Text style={stylesSAV.txtValue}>{patientLastName}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Text style={stylesSAV.txtAttrib}>fecha nacimiento: </Text>
+          <Text style={stylesSAV.txtAttrib}>Fecha nacimiento: </Text>
           <Text style={stylesSAV.txtValue}>{patientBirth}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
@@ -254,8 +254,21 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
             />
           </View>
           <Separator />
+          <View style={stylesSAV.containerTxtInput}>
+            <TextInput
+              placeholder="Description of Diagnosis"
+              editable
+              multiline
+              numberOfLines={4}
+              maxLength={300}
+              onChangeText={text => setComent(text)}
+              value={coment}
+            />
+          </View>
+          <Separator />
           <View style={stylesSAV.containerBtn}>
             <Button
+              disabled={enable}
               title="Save Results"
               onPress={saveResults}
               color="#40e0d0"
@@ -263,7 +276,11 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
           </View>
           <Separator />
           <View style={stylesSAV.containerBtn}>
-            <Button title="Go Back" onPress={() => goBack()} color="#40e0d0" />
+            <Button
+              title="Main menu"
+              onPress={() => navigate('Log In')}
+              color="#40e0d0"
+            />
           </View>
           <Separator />
         </View>
@@ -310,5 +327,12 @@ const stylesSAV = StyleSheet.create({
   txtAttrib: {
     fontSize: 16,
     color: 'black',
+  },
+  containerTxtInput: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
+    marginLeft: '10%',
+    marginRight: '10%',
   },
 });

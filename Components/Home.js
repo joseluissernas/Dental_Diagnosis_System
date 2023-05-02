@@ -27,7 +27,7 @@ export default class Home extends Component {
       this.setState({username: ''});
       this.setState({password: ''});
       this.setState({enable: true});
-      console.log('Clear all');
+      console.log('Home: resetValues');
     };
 
     //Function for the button to go to the Log In screen

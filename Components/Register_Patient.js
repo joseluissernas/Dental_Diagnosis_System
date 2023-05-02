@@ -12,22 +12,26 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default class Register_Patient extends Component {
   state = {
-    // name: 'Juan',
-    // lastname: 'Flores Perez',
-    // birthday: '1988-12-06',
-    // phone: '3324398321',
-    // email: 'Jon12@gmail.com',
     name: '',
     lastname: '',
     birthday: '',
     phone: '',
     email: '',
-    patData: '',
+    patData: {},
   };
 
   render() {
-    //Function for the button to register patient
+    //Function to reset values to initial state
+    const resetValues = () => {
+      this.setState({name: ''});
+      this.setState({lastname: ''});
+      this.setState({birthday: ''});
+      this.setState({phone: ''});
+      this.setState({email: ''});
+      console.log('Register_Patient: resetValues');
+    };
 
+    //Function for the button to register patient
     const register_Patient_Button = () => {
       let _this = this;
       var xhttp = new XMLHttpRequest();
@@ -44,14 +48,7 @@ export default class Register_Patient extends Component {
             Alert.alert('Succesfully registered patient');
             console.log('Paciente registrado exitosamente');
             retrieve_Patient_id();
-            _this.props.navigation.navigate('ImagePicker', {
-              idPaciente: _this.state.patData.idPaciente,
-              // nombre: this.state.patData.nombre,
-              // apellido: this.state.patData.apellido,
-              // fecha_nacimiento: this.state.patData.fecha_nacimiento,
-              // telefono: this.state.patData.telefono,
-              // email: this.state.patData.email,
-            });
+            resetValues();
           }
         }
       };
@@ -81,11 +78,18 @@ export default class Register_Patient extends Component {
           // Typical action to be performed when the document is ready:
           if (xhttp.responseText == 0) {
             Alert.alert('Something went wrong, try again');
-            // _this.props.navigation.navigate('ImagePicker');
           } else {
-            // console.log('retrieve: '+xhttp.responseText);
+            console.log('retrieve: ' + xhttp.responseText);
             _this.setState({patData: JSON.parse(xhttp.responseText)});
-            // console.log(_this.state.patData.idPaciente);
+            console.log('retrieve: ' + _this.state.patData.idPaciente);
+            _this.props.navigation.navigate('ImagePicker', {
+              idPaciente: _this.state.patData.idPaciente,
+              nombre: _this.state.patData.nombre,
+              apellido: _this.state.patData.apellido,
+              fecha_nacimiento: _this.state.patData.fecha_nacimiento,
+              telefono: _this.state.patData.telefono,
+              email: _this.state.patData.email,
+            });
           }
         }
       };
