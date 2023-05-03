@@ -7,25 +7,34 @@ import {
   TextInput,
   Button,
   Alert,
+  Text,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import DatePicker from 'react-native-date-picker';
 
 export default class Register_Patient extends Component {
-  state = {
-    name: '',
-    lastname: '',
-    birthday: '',
-    phone: '',
-    email: '',
-    patData: {},
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      lastname: '',
+      birthday: new Date(),
+      openDate: false,
+      phone: '',
+      email: '',
+      patData: {},
+    };
   };
+
+  // componentDidMount() {
+  //   this.setState({birthday: new Date()})
+  // }
 
   render() {
     //Function to reset values to initial state
     const resetValues = () => {
       this.setState({name: ''});
       this.setState({lastname: ''});
-      this.setState({birthday: ''});
       this.setState({phone: ''});
       this.setState({email: ''});
       console.log('Register_Patient: resetValues');
@@ -59,7 +68,9 @@ export default class Register_Patient extends Component {
           '&apellido=' +
           _this.state.lastname +
           '&fecha_nacimiento=' +
-          _this.state.birthday +
+          `${this.state.birthday.getFullYear()}-${
+            this.state.birthday.getMonth() + 1
+            }-${this.state.birthday.getDate()}` +
           '&telefono=' +
           _this.state.phone +
           '&email=' +
@@ -100,7 +111,9 @@ export default class Register_Patient extends Component {
           '&apellido=' +
           _this.state.lastname +
           '&fecha_nacimiento=' +
-          _this.state.birthday +
+          `${this.state.birthday.getFullYear()}-${
+            this.state.birthday.getMonth() + 1
+            }-${this.state.birthday.getDate()}` +
           '&telefono=' +
           _this.state.phone +
           '&email=' +
@@ -108,18 +121,6 @@ export default class Register_Patient extends Component {
         true,
       );
       xhttp.send();
-    };
-
-    // const register_Patient_Button = () => {
-    //   retrieve_Patient_id();
-    //   this.props.navigation.navigate('ImagePicker', {idPaciente: this.state.patData.idPaciente,
-    //             idMedico: this.props.route.params.medicId});
-    // }
-
-    //Function to go back
-    const go_Back = () => {
-      let _this = this;
-      _this.props.navigation.navigate('Log In');
     };
 
     //Function for a separator for buttons
@@ -154,12 +155,13 @@ export default class Register_Patient extends Component {
               />
             </View>
             <Separator />
-            <View style={stylesSAV.containerTxtInput}>
-              <TextInput
-                placeholder="Date of Birth"
-                placeholderTextColor="gray"
-                onChangeText={birthday => this.setState({birthday})}
-                value={this.state.birthday}
+            <View style={stylesSAV.containerDatePicker}>
+              <Text style={stylesSAV.txtAttrib}>Date of Birth</Text>
+              <DatePicker
+                date={this.state.birthday}
+                onDateChange={(date) => {this.setState({birthday: date}); console.log('DatePicker: ' + date)}}
+                mode='date'
+                androidVariant='nativeAndroid'
               />
             </View>
             <Separator />
@@ -237,6 +239,11 @@ const stylesSAV = StyleSheet.create({
     color: '#000000',
     fontWeight: 'bold',
   },
+  txtAttrib: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'black',
+  },
   bottom: {
     position: 'absolute',
     left: 0,
@@ -268,6 +275,13 @@ const stylesSAV = StyleSheet.create({
     height: 50,
     marginLeft: '6%',
     marginRight: '6%',
+    paddingTop: '2%',
+  },
+  containerDatePicker: {
+    height: 190,
+    marginLeft: '10%',
+    marginRight: '10%',
+    justifyContent: 'center',
     paddingTop: '2%',
   },
 });
