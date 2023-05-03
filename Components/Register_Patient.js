@@ -278,10 +278,8 @@ const stylesSAV = StyleSheet.create({
     paddingTop: '2%',
   },
   containerDatePicker: {
-    height: 190,
-    marginLeft: '10%',
-    marginRight: '10%',
-    justifyContent: 'center',
+    flex: 1,
+    alignItems: 'center',
     paddingTop: '2%',
   },
 });
