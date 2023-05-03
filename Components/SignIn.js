@@ -12,14 +12,14 @@ import {
   ScrollView,
 } from 'react-native';
 import {Appbar} from 'react-native-paper';
-import DatePicker from './DatePicker';
+import DatePicker from 'react-native-date-picker';
 
 export default class SignIn extends Component {
   //variables
   state = {
     name: '',
     lastname: '',
-    birthday: '',
+    birthday: new Date(),
     ocupation: '',
     phone: '',
     email: '',
@@ -53,7 +53,9 @@ export default class SignIn extends Component {
           '&apellido=' +
           _this.state.lastname +
           '&fecha_nacimiento=' +
-          _this.state.birthday +
+          `${_this.state.birthday.getFullYear()}-${
+            _this.state.birthday.getMonth() + 1
+            }-${_this.state.birthday.getDate()}` +
           '&ocupacion=' +
           _this.state.ocupation +
           '&telefono=' +
@@ -107,12 +109,13 @@ export default class SignIn extends Component {
               />
             </View>
             <Separator />
-            <View style={stylesSAV.containerTxtInput}>
-              <TextInput
-                placeholder="Date of Birth (AAAA-MM-DD)"
-                placeholderTextColor="gray"
-                onChangeText={birthday => this.setState({birthday})}
-                value={this.state.birthday}
+            <View style={stylesSAV.containerDatePicker}>
+              <Text style={stylesSAV.txtAttrib}>Date of Birth</Text>
+              <DatePicker
+                date={this.state.birthday}
+                onDateChange={(date) => {this.setState({birthday: date}); console.log('DatePicker: ' + date)}}
+                mode='date'
+                androidVariant='nativeAndroid'
               />
             </View>
             <Separator />
@@ -131,6 +134,7 @@ export default class SignIn extends Component {
                 placeholderTextColor="gray"
                 onChangeText={phone => this.setState({phone})}
                 value={this.state.phone}
+                maxLength={10}
               />
             </View>
             <Separator />
@@ -155,10 +159,11 @@ export default class SignIn extends Component {
             <Separator />
             <View style={stylesSAV.containerTxtInput}>
               <TextInput
-                placeholder="ID number"
+                placeholder="ID license"
                 placeholderTextColor="gray"
                 onChangeText={idcard => this.setState({idcard})}
                 value={this.state.idcard}
+                maxLength={9}
               />
             </View>
             <Separator />
@@ -243,6 +248,16 @@ const stylesSAV = StyleSheet.create({
     height: 50,
     marginLeft: '6%',
     marginRight: '6%',
+    paddingTop: '2%',
+  },
+  txtAttrib: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'black',
+  },
+  containerDatePicker: {
+    flex: 1,
+    alignItems: 'center',
     paddingTop: '2%',
   },
 });

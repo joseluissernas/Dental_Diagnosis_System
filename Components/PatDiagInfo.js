@@ -12,10 +12,6 @@ export default class PatDiagInfo extends Component {
     };
   }
 
-  componentDidMount() {
-    // console.log(this.props.diagInfo)
-  }
-
   render() {
   const Separator = () => <View style={stylesSAV.separator} />;
 

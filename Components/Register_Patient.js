@@ -19,7 +19,6 @@ export default class Register_Patient extends Component {
       name: '',
       lastname: '',
       birthday: new Date(),
-      openDate: false,
       phone: '',
       email: '',
       patData: {},
@@ -171,6 +170,7 @@ export default class Register_Patient extends Component {
                 placeholderTextColor="gray"
                 onChangeText={phone => this.setState({phone})}
                 value={this.state.phone}
+                maxLength={10}
               />
             </View>
             <Separator />
