@@ -23,7 +23,6 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
   const [patientEmail, setPatientEmail] = useState(route.params.email);
   const [estadoDiag, setEstadoDiag] = useState('');
   const [coment, setComent] = useState('');
-  const [diagnostic, setDiagnostic] = useState('');
   const [enable, setEnable] = useState(true);
 
   //Function to reset values to initial state
@@ -137,19 +136,19 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
       let responseJson = await res.json();
       console.log(responseJson);
       if (responseJson.message == '0') {
-        Alert.alert('Posible gingivitis' + responseJson.message);
+        Alert.alert('Posible gingivitis');
         setEstadoDiag('Posible gingivitis');
         handleEnableState();
       } else if (responseJson.message == '1') {
-        Alert.alert('Posible gingivitis y sarro' + responseJson.message);
+        Alert.alert('Posible gingivitis y sarro');
         setEstadoDiag('Posible gingivitis y sarro');
         handleEnableState();
       } else if (responseJson.message == '2') {
-        Alert.alert('Posible dentadura sana' + responseJson.message);
+        Alert.alert('Posible dentadura sana');
         setEstadoDiag('Posible dentadura sana');
         handleEnableState();
       } else if (responseJson.message == '3') {
-        Alert.alert('Posible dentadura con sarro' + responseJson.message);
+        Alert.alert('Posible dentadura con sarro');
         setEstadoDiag('Posible dentadura con sarro');
         handleEnableState();
       } else {
@@ -227,6 +226,10 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
         <View style={{flexDirection: 'row'}}>
           <Text style={stylesSAV.txtAttrib}>Email: </Text>
           <Text style={stylesSAV.txtValue}>{patientEmail}</Text>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={stylesSAV.txtAttrib}>Estado diagnostico: </Text>
+          <Text style={stylesSAV.txtValue}>{estadoDiag}</Text>
         </View>
         <View style={stylesSAV.vw}>
           <Separator />
