@@ -126,7 +126,7 @@ const ImagePicker = ({route, navigation: {navigate, goBack}}) => {
       console.log(filename);
       console.log(type);
       //fetch to post the image to the server
-      let res = await fetch('http://saulcz.pythonanywhere.com/predict', {
+      let res = await fetch('https://saulcz.pythonanywhere.com/predict', {
         method: 'POST',
         header: {
           'Content-Type': 'multipart/form-data',
