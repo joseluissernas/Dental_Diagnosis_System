@@ -114,6 +114,7 @@ export default class Home extends Component {
                 placeholderTextColor="gray"
                 onChangeText={username => this.setState({username})}
                 value={this.state.username}
+                maxLength={50}
               />
             </View>
             <Separator />
@@ -124,6 +125,7 @@ export default class Home extends Component {
                 onChangeText={password => this.setState({password})}
                 value={this.state.password}
                 secureTextEntry={true}
+                maxLength={60}
               />
             </View>
             <Separator />

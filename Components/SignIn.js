@@ -97,6 +97,7 @@ export default class SignIn extends Component {
                 placeholderTextColor="gray"
                 onChangeText={name => this.setState({name})}
                 value={this.state.name}
+                maxLength={50}
               />
             </View>
             <Separator />
@@ -106,6 +107,7 @@ export default class SignIn extends Component {
                 placeholderTextColor="gray"
                 onChangeText={lastname => this.setState({lastname})}
                 value={this.state.lastname}
+                maxLength={50}
               />
             </View>
             <Separator />
@@ -125,6 +127,7 @@ export default class SignIn extends Component {
                 placeholderTextColor="gray"
                 onChangeText={ocupation => this.setState({ocupation})}
                 value={this.state.ocupation}
+                maxLength={30}
               />
             </View>
             <Separator />
@@ -144,6 +147,7 @@ export default class SignIn extends Component {
                 placeholderTextColor="gray"
                 onChangeText={email => this.setState({email})}
                 value={this.state.email}
+                maxLength={50}
               />
             </View>
             <Separator />
@@ -154,6 +158,7 @@ export default class SignIn extends Component {
                 onChangeText={password => this.setState({password})}
                 value={this.state.password}
                 secureTextEntry={true}
+                maxLength={60}
               />
             </View>
             <Separator />

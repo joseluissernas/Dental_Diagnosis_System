@@ -142,6 +142,7 @@ export default class Register_Patient extends Component {
                 placeholderTextColor="gray"
                 onChangeText={name => this.setState({name})}
                 value={this.state.name}
+                maxLength={50}
               />
             </View>
             <Separator />
@@ -151,6 +152,7 @@ export default class Register_Patient extends Component {
                 placeholderTextColor="gray"
                 onChangeText={lastname => this.setState({lastname})}
                 value={this.state.lastname}
+                maxLength={50}
               />
             </View>
             <Separator />
@@ -180,6 +182,7 @@ export default class Register_Patient extends Component {
                 placeholderTextColor="gray"
                 onChangeText={email => this.setState({email})}
                 value={this.state.email}
+                maxLength={50}
               />
             </View>
             <Separator />
